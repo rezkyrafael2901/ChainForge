@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import CodePreview from '@/components/CodePreview'
+import DeployPanel from '@/components/DeployPanel'
 import { GeneratedProject, GeneratedFile } from '@/types'
 
 const BUILD_STEPS = [
@@ -20,6 +21,7 @@ export default function BuildPage() {
   const [currentStep, setCurrentStep] = useState(0)
   const [activeTab, setActiveTab] = useState<'contracts' | 'frontend' | 'deploy' | 'readme'>('contracts')
   const [copiedPath, setCopiedPath] = useState<string | null>(null)
+  const [isZipping, setIsZipping] = useState(false)
 
   useEffect(() => {
     const data = sessionStorage.getItem('chainforge_project')
@@ -28,7 +30,6 @@ export default function BuildPage() {
       return
     }
     
-    // Simulate build progress
     const parsed = JSON.parse(data) as GeneratedProject
     const timers = [
       setTimeout(() => setCurrentStep(1), 800),
@@ -45,21 +46,18 @@ export default function BuildPage() {
     setTimeout(() => setCopiedPath(null), 2000)
   }
 
-  const downloadAll = () => {
-    if (!project) return
-    const allFiles = [
-      ...project.contracts,
-      ...project.frontend,
-      project.deployScript,
-    ]
-    const content = allFiles.map(f => `// ===== ${f.path} =====\n\n${f.content}`).join('\n\n')
-    const blob = new Blob([content], { type: 'text/plain' })
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = `${project.spec.name.replace(/\s+/g, '-').toLowerCase()}-chainforge.sol`
-    a.click()
-    URL.revokeObjectURL(url)
+  const downloadZip = async () => {
+    if (!project || isZipping) return
+    setIsZipping(true)
+    try {
+      const { downloadProjectAsZip } = await import('@/lib/zip')
+      await downloadProjectAsZip(project)
+    } catch (err) {
+      console.error('ZIP download failed:', err)
+      alert('Failed to generate ZIP. Try again.')
+    } finally {
+      setIsZipping(false)
+    }
   }
 
   const chainColors: Record<string, string> = {
@@ -132,17 +130,27 @@ export default function BuildPage() {
           </button>
           <div className="flex gap-3">
             <button
-              onClick={downloadAll}
-              className="px-4 py-2 rounded-lg bg-bg-tertiary text-white text-sm hover:bg-bg-secondary border border-gray-700 transition-all"
+              onClick={downloadZip}
+              disabled={isZipping}
+              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-green-600 to-emerald-600 text-white text-sm font-medium hover:shadow-lg hover:shadow-green-500/25 transition-all disabled:opacity-50"
             >
-              📥 Download All
+              {isZipping ? (
+                <>
+                  <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                  </svg>
+                  Zipping...
+                </>
+              ) : (
+                <>📥 Download ZIP</>
+              )}
             </button>
             <button
-              disabled
-              className="px-4 py-2 rounded-lg bg-gray-700 text-gray-400 text-sm cursor-not-allowed"
-              title="Coming soon"
+              onClick={() => setActiveTab('deploy')}
+              className="px-4 py-2 rounded-lg bg-gradient-to-r from-accent-primary to-accent-secondary text-white text-sm font-medium hover:shadow-lg hover:shadow-accent-primary/25 transition-all"
             >
-              🚀 Deploy (Coming Soon)
+              🚀 Deploy
             </button>
           </div>
         </div>
@@ -208,6 +216,39 @@ export default function BuildPage() {
               <pre className="text-sm text-gray-300 whitespace-pre-wrap font-mono leading-relaxed">
                 {project.readme}
               </pre>
+            </div>
+          </div>
+        ) : activeTab === 'deploy' ? (
+          <div className="grid lg:grid-cols-2 gap-6">
+            <DeployPanel
+              contractName={project.spec.name}
+              contractType={project.spec.type}
+              contractSource={project.contracts[0]?.content || ''}
+              chain={project.spec.chain}
+            />
+            <div className="space-y-4">
+              {activeFiles.map((file, i) => (
+                <div key={i} className="card-glow rounded-xl">
+                  <div className="bg-bg-secondary rounded-xl overflow-hidden">
+                    <div className="flex items-center justify-between px-6 py-4 border-b border-gray-800">
+                      <div className="flex items-center gap-3">
+                        <span className="text-lg">📄</span>
+                        <div>
+                          <h3 className="text-white font-medium font-mono text-sm">{file.path}</h3>
+                          <p className="text-xs text-gray-500">{file.description}</p>
+                        </div>
+                      </div>
+                      <button
+                        onClick={() => copyCode(file)}
+                        className="px-3 py-1 rounded text-xs bg-bg-tertiary hover:bg-accent-primary text-gray-300 hover:text-white transition-all border border-gray-700"
+                      >
+                        {copiedPath === file.path ? '✓ Copied' : 'Copy'}
+                      </button>
+                    </div>
+                    <CodePreview code={file.content} language={file.language} />
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         ) : (
