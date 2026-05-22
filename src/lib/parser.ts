@@ -124,14 +124,16 @@ export function parsePrompt(input: string): ProjectSpec {
   
   const allFeatures = Array.from(new Set([...(defaultFeatures[type] || []), ...features]))
   
-  // Extract numeric params
-  const supplyMatch = input.match(/(?:supply|total|max)\s*(?:of\s*)?([\d,.]+)\s*(?:k|juta|million|m)?/i)
+  // Extract numeric params — match "10k supply", "supply 10000", "10k", "1 juta" etc.
+  const supplyMatch = input.match(/([\d,.]+)\s*(k|juta|million|m)\b|(?:supply|total|max|supply\s+of)\s*(?:of\s*)?([\d,.]+)\s*(k|juta|million|m)?/i)
   let supply = '1000000'
   if (supplyMatch) {
-    const num = parseFloat(supplyMatch[1].replace(/,/g, ''))
-    if (input.toLowerCase().includes('juta') || input.toLowerCase().includes('million')) {
+    const numStr = supplyMatch[1] || supplyMatch[3] || '0'
+    const num = parseFloat(numStr.replace(/,/g, ''))
+    const suffix = (supplyMatch[2] || supplyMatch[4] || '').toLowerCase()
+    if (suffix === 'juta' || suffix === 'million' || suffix === 'm') {
       supply = String(num * 1000000)
-    } else if (input.toLowerCase().includes('k')) {
+    } else if (suffix === 'k') {
       supply = String(num * 1000)
     } else {
       supply = String(num)
