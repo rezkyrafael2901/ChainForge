@@ -221,10 +221,8 @@ export default function BuildPage() {
         ) : activeTab === 'deploy' ? (
           <div className="grid lg:grid-cols-2 gap-6">
             <DeployPanel
-              contractName={project.spec.name}
-              contractType={project.spec.type}
+              spec={project.spec}
               contractSource={project.contracts[0]?.content || ''}
-              chain={project.spec.chain}
             />
             <div className="space-y-4">
               {activeFiles.map((file, i) => (

@@ -1,91 +1,98 @@
 import { NextResponse } from 'next/server'
+import { ProjectSpec } from '@/types'
+import { generateDeployableERC20 } from '@/lib/deployable'
 
-// Simple ERC-20 bytecode for deployment (pre-compiled from OpenZeppelin 0.8.20)
-// This avoids loading the full solc compiler on Vercel serverless
-const PRECOMPILED_ERC20_ABI = [
-  { type: 'constructor', inputs: [{ name: 'name', type: 'string' }, { name: 'symbol', type: 'string' }, { name: 'initialSupply', type: 'uint256' }], stateMutability: 'nonpayable' },
-  { type: 'function', name: 'name', inputs: [], outputs: [{ name: '', type: 'string' }], stateMutability: 'view' },
-  { type: 'function', name: 'symbol', inputs: [], outputs: [{ name: '', type: 'string' }], stateMutability: 'view' },
-  { type: 'function', name: 'decimals', inputs: [], outputs: [{ name: '', type: 'uint8' }], stateMutability: 'view' },
-  { type: 'function', name: 'totalSupply', inputs: [], outputs: [{ name: '', type: 'uint256' }], stateMutability: 'view' },
-  { type: 'function', name: 'balanceOf', inputs: [{ name: 'account', type: 'address' }], outputs: [{ name: '', type: 'uint256' }], stateMutability: 'view' },
-  { type: 'function', name: 'transfer', inputs: [{ name: 'to', type: 'address' }, { name: 'amount', type: 'uint256' }], outputs: [{ name: '', type: 'bool' }], stateMutability: 'nonpayable' },
-  { type: 'function', name: 'approve', inputs: [{ name: 'spender', type: 'address' }, { name: 'amount', type: 'uint256' }], outputs: [{ name: '', type: 'bool' }], stateMutability: 'nonpayable' },
-  { type: 'function', name: 'transferFrom', inputs: [{ name: 'from', type: 'address' }, { name: 'to', type: 'address' }, { name: 'amount', type: 'uint256' }], outputs: [{ name: '', type: 'bool' }], stateMutability: 'nonpayable' },
-  { type: 'function', name: 'allowance', inputs: [{ name: 'owner', type: 'address' }, { name: 'spender', type: 'address' }], outputs: [{ name: '', type: 'uint256' }], stateMutability: 'view' },
-  { type: 'function', name: 'mint', inputs: [{ name: 'to', type: 'address' }, { name: 'amount', type: 'uint256' }], outputs: [], stateMutability: 'nonpayable' },
-  { type: 'function', name: 'burn', inputs: [{ name: 'amount', type: 'uint256' }], outputs: [], stateMutability: 'nonpayable' },
-  { type: 'function', name: 'owner', inputs: [], outputs: [{ name: '', type: 'address' }], stateMutability: 'view' },
-  { type: 'event', name: 'Transfer', inputs: [{ name: 'from', type: 'address', indexed: true }, { name: 'to', type: 'address', indexed: true }, { name: 'value', type: 'uint256', indexed: false }], anonymous: false },
-  { type: 'event', name: 'Approval', inputs: [{ name: 'owner', type: 'address', indexed: true }, { name: 'spender', type: 'address', indexed: true }, { name: 'value', type: 'uint256', indexed: false }], anonymous: false },
-]
+export const runtime = 'nodejs'
+
+type SolcOutput = {
+  errors?: Array<{ severity: 'error' | 'warning'; formattedMessage: string; message: string }>
+  contracts?: Record<string, Record<string, { abi: any[]; evm: { bytecode: { object: string } } }>>
+}
 
 export async function POST(request: Request) {
   try {
-    const { contractSource, contractName, type } = await request.json()
+    const body = await request.json()
+    const spec = body.spec as ProjectSpec | undefined
 
-    // For MVP: Use a simplified compilation approach
-    // In production, this would use solc.js to compile the actual generated contract
-    // For now, we return a deploy-ready package with constructor args info
-
-    const result = {
-      success: true,
-      contractName: contractName || 'Contract',
-      type: type || 'token',
-      // For ERC-20 tokens, provide a deploy-ready package
-      // Users can deploy via their wallet with constructor arguments
-      constructorArgs: getConstructorArgs(type, contractName),
-      deployInstructions: getDeployInstructions(type, contractName),
-      verificationUrl: getVerificationUrl(type),
+    if (!spec) {
+      return NextResponse.json({ error: 'Project spec is required' }, { status: 400 })
     }
 
-    return NextResponse.json(result)
+    if (spec.type !== 'token') {
+      return NextResponse.json({
+        error: 'Direct deploy currently supports ERC-20 tokens only',
+        supported: ['token'],
+        fallback: 'Use Download ZIP or Remix-assisted deploy for this project type.',
+      }, { status: 400 })
+    }
+
+    const source = generateDeployableERC20(spec)
+    const contractName = safeContractName(spec.name || 'ChainForgeToken')
+
+    // Dynamic import keeps solc server-side only
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const solc = require('solc')
+
+    const input = {
+      language: 'Solidity',
+      sources: {
+        [`${contractName}.sol`]: { content: source },
+      },
+      settings: {
+        optimizer: { enabled: true, runs: 200 },
+        outputSelection: {
+          '*': {
+            '*': ['abi', 'evm.bytecode.object'],
+          },
+        },
+      },
+    }
+
+    const output = JSON.parse(solc.compile(JSON.stringify(input))) as SolcOutput
+
+    const errors = output.errors?.filter(e => e.severity === 'error') || []
+    const warnings = output.errors?.filter(e => e.severity === 'warning') || []
+
+    if (errors.length > 0) {
+      return NextResponse.json({
+        error: 'Compilation failed',
+        errors: errors.map(e => e.formattedMessage || e.message),
+        source,
+      }, { status: 500 })
+    }
+
+    const contract = output.contracts?.[`${contractName}.sol`]?.[contractName]
+    if (!contract?.evm?.bytecode?.object) {
+      return NextResponse.json({
+        error: 'No bytecode generated',
+        source,
+      }, { status: 500 })
+    }
+
+    const bytecode = `0x${contract.evm.bytecode.object}`
+
+    return NextResponse.json({
+      success: true,
+      contractName,
+      type: spec.type,
+      chain: spec.chain,
+      source,
+      abi: contract.abi,
+      bytecode,
+      bytecodeSize: Math.round((bytecode.length - 2) / 2),
+      warnings: warnings.map(w => w.formattedMessage || w.message),
+      estimatedGas: 'Will be estimated by wallet',
+      constructorArgs: [], // Self-contained ERC20 constructor has no args
+    })
   } catch (error) {
     return NextResponse.json(
-      { error: 'Failed to prepare deployment', details: String(error) },
+      { error: 'Failed to compile deployment package', details: String(error) },
       { status: 500 }
     )
   }
 }
 
-function getConstructorArgs(type: string, name: string): string[] {
-  switch (type) {
-    case 'token':
-      return ['name (string)', 'symbol (string)', 'initialSupply (uint256)']
-    case 'nft':
-      return ['name (string)', 'symbol (string)', 'baseURI (string)', 'owner (address)']
-    case 'dex':
-      return ['factory (address)', 'WETH (address)']
-    case 'staking':
-      return ['stakingToken (address)', 'rewardToken (address)', 'owner (address)']
-    case 'dao':
-      return ['token (address)', 'timelock (address)']
-    default:
-      return ['constructor args vary by contract']
-  }
-}
-
-function getDeployInstructions(type: string, name: string): string[] {
-  return [
-    `1. Open Remix IDE (remix.ethereum.org)`,
-    `2. Create new file: ${name}.sol`,
-    `3. Paste the contract code from the Contracts tab`,
-    `4. Compile with Solidity 0.8.20`,
-    `5. Go to Deploy tab → Select "Injected Provider" (MetaMask)`,
-    `6. Enter constructor arguments`,
-    `7. Click Deploy and confirm in MetaMask`,
-    `8. Verify on block explorer after deployment`,
-  ]
-}
-
-function getVerificationUrl(type: string): string {
-  const urls: Record<string, string> = {
-    ethereum: 'https://etherscan.io/verifyContract',
-    base: 'https://basescan.org/verifyContract',
-    arbitrum: 'https://arbiscan.io/verifyContract',
-    polygon: 'https://polygonscan.com/verifyContract',
-    bsc: 'https://bscscan.com/verifyContract',
-    avalanche: 'https://snowtrace.io/verifyContract',
-  }
-  return urls[type] || urls.ethereum
+function safeContractName(value: string): string {
+  const cleaned = value.replace(/[^a-zA-Z0-9]/g, '') || 'ChainForgeToken'
+  return /^[A-Za-z]/.test(cleaned) ? cleaned : `Token${cleaned}`
 }
