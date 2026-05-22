@@ -1,0 +1,24 @@
+{
+  "name": "chainforge",
+  "version": "0.1.0",
+  "private": true,
+  "description": "AI-powered blockchain project builder",
+  "workspaces": [
+    "packages/shared",
+    "packages/engine",
+    "packages/contracts",
+    "packages/frontend"
+  ],
+  "scripts": {
+    "build": "npm run build --workspace=packages/shared && npm run build --workspace=packages/engine",
+    "build:shared": "npm run build --workspace=packages/shared",
+    "build:engine": "npm run build --workspace=packages/engine",
+    "dev": "npm run dev --workspace=packages/engine",
+    "test": "npm run test --workspaces --if-present",
+    "clean": "rm -rf node_modules packages/*/node_modules packages/*/dist"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "packageManager": "npm@10.0.0"
+}
