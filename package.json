@@ -11,6 +11,7 @@
   ],
   "scripts": {
     "build": "npm run build --workspace=packages/shared && npm run build --workspace=packages/engine",
+    "build:vercel": "npm run build:shared && cd packages/frontend && npm run build",
     "build:shared": "npm run build --workspace=packages/shared",
     "build:engine": "npm run build --workspace=packages/engine",
     "dev": "npm run dev --workspace=packages/engine",
