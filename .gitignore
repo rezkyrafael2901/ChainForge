@@ -3,12 +3,9 @@ node_modules/
 .pnp
 .pnp.js
 
-# next.js
+# production
 .next/
 out/
-
-# production
-build/
 dist/
 
 # misc
