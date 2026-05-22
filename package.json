@@ -2,24 +2,27 @@
   "name": "chainforge",
   "version": "0.1.0",
   "private": true,
-  "description": "AI-powered blockchain project builder",
-  "workspaces": [
-    "packages/shared",
-    "packages/engine",
-    "packages/contracts",
-    "packages/frontend"
-  ],
   "scripts": {
-    "build": "npm run build --workspace=packages/shared && npm run build --workspace=packages/engine",
-    "build:vercel": "npm run build:shared && cd packages/frontend && npm run build",
-    "build:shared": "npm run build --workspace=packages/shared",
-    "build:engine": "npm run build --workspace=packages/engine",
-    "dev": "npm run dev --workspace=packages/engine",
-    "test": "npm run test --workspaces --if-present",
-    "clean": "rm -rf node_modules packages/*/node_modules packages/*/dist"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
   },
-  "engines": {
-    "node": ">=20.0.0"
+  "dependencies": {
+    "next": "14.2.18",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-syntax-highlighter": "^15.6.1",
+    "framer-motion": "^11.11.0"
   },
-  "packageManager": "npm@10.0.0"
+  "devDependencies": {
+    "typescript": "^5.6.3",
+    "@types/node": "^22.9.0",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@types/react-syntax-highlighter": "^15.5.13",
+    "tailwindcss": "^3.4.14",
+    "postcss": "^8.4.49",
+    "autoprefixer": "^10.4.20"
+  }
 }

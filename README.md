@@ -1,123 +1,61 @@
-# ⛓️ ChainForge
+# 🔥 ChainForge
 
-> **Prompt → Deploy. No code required.**
+**AI-Powered Blockchain Project Builder — Prompt → Deploy. No code required.**
 
-AI-powered blockchain project builder. Describe what you want in plain English, and ChainForge generates production-ready smart contracts, compiles them, and deploys to your target chain.
+ChainForge lets you build full blockchain projects by simply describing what you want. From smart contracts to frontend, everything is generated and ready to deploy.
 
-![Next.js](https://img.shields.io/badge/Next.js-14-black)
-![Solidity](https://img.shields.io/badge/Solidity-0.8.24-363636)
-![Foundry](https://img.shields.io/badge/Foundry-latest-fff)
-![License](https://img.shields.io/badge/License-MIT-blue)
+## Features
 
-## 🚀 What It Does
+- 🤖 **AI-Powered** — Describe your project in natural language (English, Indonesian, or any language)
+- ⛓️ **Multi-Chain** — Ethereum, Base, Arbitrum, Polygon, BSC, Avalanche
+- 📝 **Smart Contracts** — Complete, compilable Solidity contracts (ERC-20, ERC-721, DEX, Staking, DAO)
+- 🎨 **Auto Frontend** — Landing pages and dApp interfaces generated per project
+- 🚀 **One-Click Deploy** — Foundry deploy scripts with verification (coming soon)
 
-```
-"Bikin token ERC-20 namanya RezkiCoin, symbol RZK, supply 1 juta di Sepolia"
-                            ↓
-    ✅ Smart contract generated
-    ✅ Foundry deploy script
-    ✅ Compiled & verified
-    ✅ Deployed to testnet
-    ✅ Live frontend
-```
+## Project Types
 
-## 📦 Project Structure
+| Type | Contract | Features |
+|------|----------|----------|
+| Token | ERC-20 | Mint, Burn, Permit, Votes, Capped |
+| NFT | ERC-721 | Enumerable, URI Storage, Royalties (ERC-2981), Reveal |
+| DEX | Uniswap V2 | Factory + Router + Pair, AMM with x*y=k |
+| Staking | StakingRewards | Stake token → earn rewards, lock period, emergency withdraw |
+| DAO | Governor | Governance token with votes + permit |
 
-```
-chainforge/
-├── packages/
-│   ├── engine/          # AI prompt parser + code generator + deployer
-│   ├── contracts/       # Foundry project with Solidity templates
-│   ├── frontend/        # Next.js 14 web UI (dark theme)
-│   └── shared/          # Shared types, chain configs, constants
-├── CONCEPT.md           # Full product concept & roadmap
-└── package.json         # Monorepo config (npm workspaces)
-```
-
-### Packages
-
-| Package | Description |
-|---------|-------------|
-| `engine` | Core brain — Claude API parses prompts, generates Solidity code, deploys via Foundry |
-| `contracts` | Smart contract templates (ERC-20, presale) with tests |
-| `frontend` | Beautiful dark-themed web UI with prompt input, chain selector, and build results |
-| `shared` | TypeScript types, chain configurations, and constants |
-
-## 🏁 Quick Start
-
-### Prerequisites
-
-- Node.js 20+
-- [Foundry](https://book.getfoundry.sh/getting-started/installation) (for smart contracts)
-- Anthropic API key (for AI parsing)
-
-### Setup
+## Quick Start
 
 ```bash
-# Clone
-git clone https://github.com/rezkyrafael2901/chainforge.git
-cd chainforge
-
-# Install dependencies
+git clone https://github.com/rezkyrafael2901/ChainForge.git
+cd ChainForge
 npm install
-
-# Copy env template
-cp .env.example .env
-# Edit .env with your keys
-
-# Build shared + engine
-npm run build
-
-# Run frontend
-cd packages/frontend && npm run dev
-```
-
-### Environment Variables
-
-```env
-ANTHROPIC_API_KEY=sk-ant-...      # Claude API for prompt parsing
-SEPOLIA_RPC_URL=https://...       # Sepolia testnet RPC
-PRIVATE_KEY=0x...                 # Deployer wallet private key
-ETHERSCAN_API_KEY=...             # For contract verification
-```
-
-### CLI Usage
-
-```bash
-cd packages/engine
-npx tsx src/index.ts "Bikin token ERC-20 namanya MyToken, symbol MTK, supply 1 juta"
-```
-
-### Web UI
-
-```bash
-cd packages/frontend
 npm run dev
-# Open http://localhost:3000
 ```
 
-## 🛠️ Tech Stack
+Open [http://localhost:3000](http://localhost:3000)
 
-- **AI**: Anthropic Claude (prompt parsing + code generation)
-- **Smart Contracts**: Solidity 0.8.24 + OpenZeppelin v5 + Foundry
-- **Frontend**: Next.js 14 + Tailwind CSS + RainbowKit + wagmi
-- **Monorepo**: npm workspaces
+## Tech Stack
 
-## 📋 Supported Project Types
+- **Frontend**: Next.js 14, Tailwind CSS, TypeScript
+- **AI Engine**: Built-in prompt parser (Claude/GPT optional)
+- **Contracts**: Solidity 0.8.20, OpenZeppelin v5
+- **Deploy**: Foundry (coming soon)
 
-| Type | Status | Description |
-|------|--------|-------------|
-| 🪙 Token | ✅ | ERC-20 with mint, burn, pause, cap |
-| 🎨 NFT | 🔜 | ERC-721/1155 with minting |
-| 🔄 DEX | 🔜 | AMM swap (Uniswap V2 style) |
-| 🥩 Staking | 🔜 | Token staking with rewards |
-| 🏛️ DAO | 🔜 | Governance & voting |
-| 🛒 Marketplace | 🔜 | NFT marketplace |
+## How It Works
 
-## 🌐 Supported Chains
+1. **Describe** — Type what you want to build in plain language
+2. **Configure** — Select chain and project type
+3. **Generate** — AI generates complete smart contracts + frontend + deploy script
+4. **Deploy** — Download code or one-click deploy to testnet/mainnet (coming soon)
 
-Ethereum • Base • Arbitrum • Polygon • BSC • Sepolia (testnet)
+## Examples
 
-## 📄 License
+```
+"Bikin token ERC-20 bernama CryptoRupiah simbol CRP supply 1 juta di Ethereum"
+"Create an NFT collection called SpaceMonkeys with 10k supply on Base"
+"Build a DEX like Uniswap on Arbitrum"
+"Make a staking platform for my token with 15% APY"
+```
 
-MIT
+## License
+
+MIT — Built with 🔥 by [ChainForge](https://github.com/rezkyrafael2901/ChainForge)
