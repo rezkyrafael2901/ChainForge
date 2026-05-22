@@ -32,6 +32,8 @@ body {
   mask-composite: exclude;
   opacity: 0;
   transition: opacity 0.3s;
+  pointer-events: none;
+  z-index: -1;
 }
 .card-glow:hover::before { opacity: 1; }
 
