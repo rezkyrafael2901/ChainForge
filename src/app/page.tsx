@@ -1,9 +1,12 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
+import FeatureToggle from '@/components/FeatureToggle'
+import { ProjectType } from '@/types'
+import { getDefaultFeatures } from '@/lib/features'
 
 const CHAINS = [
   { id: 'ethereum', name: 'Ethereum', icon: '⟠', color: '#627eea' },
@@ -34,9 +37,37 @@ export default function HomePage() {
   const router = useRouter()
   const [prompt, setPrompt] = useState('')
   const [selectedChain, setSelectedChain] = useState('ethereum')
-  const [selectedType, setSelectedType] = useState('token')
+  const [selectedType, setSelectedType] = useState<ProjectType>('token')
+  const [selectedFeatures, setSelectedFeatures] = useState<string[]>(getDefaultFeatures('token'))
   const [isBuilding, setIsBuilding] = useState(false)
   const [error, setError] = useState('')
+  const [showFeatures, setShowFeatures] = useState(false)
+
+  // Reset features when type changes
+  useEffect(() => {
+    setSelectedFeatures(getDefaultFeatures(selectedType))
+  }, [selectedType])
+
+  // Parse prompt to detect type and pre-select features
+  const handleParsePreview = async () => {
+    if (!prompt.trim()) return
+    try {
+      const res = await fetch('/api/parse', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt: prompt.trim() }),
+      })
+      if (res.ok) {
+        const spec = await res.json()
+        if (spec.type && spec.type !== selectedType) {
+          setSelectedType(spec.type as ProjectType)
+        }
+        if (spec.features?.length) {
+          setSelectedFeatures(spec.features)
+        }
+      }
+    } catch {}
+  }
 
   const handleBuild = async () => {
     if (!prompt.trim()) return
@@ -53,9 +84,10 @@ export default function HomePage() {
       if (!parseRes.ok) throw new Error('Failed to parse prompt')
       const spec = await parseRes.json()
 
-      // Override with manual selections
+      // Override with manual selections + feature toggles
       spec.chain = selectedChain
-      if (selectedType) spec.type = selectedType
+      spec.type = selectedType
+      spec.features = selectedFeatures
 
       // Generate project
       const genRes = await fetch('/api/generate', {
@@ -104,7 +136,8 @@ export default function HomePage() {
               <textarea
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
-                placeholder="Describe your blockchain project... e.g. &quot;Bikin DEX kayak Uniswap di Base&quot;"
+                onBlur={handleParsePreview}
+                placeholder='Describe your blockchain project... e.g. "Bikin DEX kayak Uniswap di Base"'
                 className="w-full bg-transparent text-lg text-white placeholder-gray-500 resize-none outline-none min-h-[120px]"
                 rows={4}
               />
@@ -138,7 +171,7 @@ export default function HomePage() {
                   {PROJECT_TYPES.map((type) => (
                     <button
                       key={type.id}
-                      onClick={() => setSelectedType(type.id)}
+                      onClick={() => setSelectedType(type.id as ProjectType)}
                       className={`flex flex-col items-center p-3 rounded-xl text-center transition-all ${
                         selectedType === type.id
                           ? 'bg-bg-tertiary border border-accent-primary'
@@ -150,6 +183,26 @@ export default function HomePage() {
                     </button>
                   ))}
                 </div>
+              </div>
+
+              {/* Feature Toggle Section */}
+              <div className="mt-4">
+                <button
+                  onClick={() => setShowFeatures(!showFeatures)}
+                  className="flex items-center gap-2 text-sm text-gray-400 hover:text-white transition-colors"
+                >
+                  <span className={`transition-transform ${showFeatures ? 'rotate-90' : ''}`}>▶</span>
+                  <span>Customize Features</span>
+                  <span className="text-xs text-gray-600">({selectedFeatures.length} active)</span>
+                </button>
+
+                {showFeatures && (
+                  <FeatureToggle
+                    type={selectedType}
+                    selected={selectedFeatures}
+                    onChange={setSelectedFeatures}
+                  />
+                )}
               </div>
 
               {/* Build Button */}
