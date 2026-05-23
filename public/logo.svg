@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="BlockPilot logo">
+  <defs>
+    <linearGradient id="bpGrad" x1="18" y1="110" x2="110" y2="18" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#6366f1"/>
+      <stop offset="0.52" stop-color="#8b5cf6"/>
+      <stop offset="1" stop-color="#06b6d4"/>
+    </linearGradient>
+    <filter id="glow" x="-35%" y="-35%" width="170%" height="170%">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feColorMatrix in="blur" type="matrix" values="0 0 0 0 0.39 0 0 0 0 0.40 0 0 0 0 0.95 0 0 0 0.55 0"/>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <rect width="128" height="128" rx="32" fill="#050816"/>
+  <path filter="url(#glow)" d="M64 16 106 40v48l-42 24-42-24V40L64 16Z" fill="url(#bpGrad)"/>
+  <path d="M64 28 95 46v36l-31 18-31-18V46l31-18Z" fill="#070b1f" opacity="0.92"/>
+  <path d="M47 39h23c12 0 21 8 21 19s-9 19-21 19H58v19H47V39Zm11 10v18h11c6 0 10-4 10-9s-4-9-10-9H58Z" fill="white"/>
+  <path d="M86 80 103 91 86 102v-8H68v-6h18v-8Z" fill="#22d3ee"/>
+</svg>

@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-label="BlockPilot social preview">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#050816"/>
+      <stop offset="1" stop-color="#111827"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="220" y1="120" x2="980" y2="520" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#6366f1"/>
+      <stop offset="0.5" stop-color="#8b5cf6"/>
+      <stop offset="1" stop-color="#06b6d4"/>
+    </linearGradient>
+    <filter id="blur" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="28"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="630" rx="48" fill="url(#bg)"/>
+  <circle cx="930" cy="170" r="150" fill="#8b5cf6" opacity="0.18" filter="url(#blur)"/>
+  <circle cx="300" cy="470" r="180" fill="#06b6d4" opacity="0.12" filter="url(#blur)"/>
+  <g transform="translate(86 110)">
+    <rect width="178" height="178" rx="44" fill="#0b1020" stroke="rgba(255,255,255,0.08)"/>
+    <path d="M89 22 149 57v64l-60 35-60-35V57l60-35Z" fill="url(#accent)"/>
+    <path d="M89 40 133 65v50l-44 25-44-25V65l44-25Z" fill="#070b1f" opacity="0.9"/>
+    <path d="M63 54h31c16 0 28 11 28 26s-12 26-28 26H77v25H63V54Zm14 13v24h15c8 0 14-5 14-12s-6-12-14-12H77Z" fill="white"/>
+  </g>
+  <text x="320" y="205" fill="white" font-family="Inter, Arial, sans-serif" font-size="74" font-weight="800">BlockPilot</text>
+  <text x="320" y="273" fill="#cbd5e1" font-family="Inter, Arial, sans-serif" font-size="32" font-weight="500">AI blockchain project builder</text>
+  <text x="320" y="350" fill="#93c5fd" font-family="Inter, Arial, sans-serif" font-size="26" font-weight="600">Prompt → generate → deploy</text>
+  <rect x="320" y="390" width="420" height="84" rx="24" fill="rgba(99,102,241,0.12)" stroke="rgba(99,102,241,0.35)"/>
+  <text x="352" y="442" fill="#e0e7ff" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="600">Turn ideas into on-chain products</text>
+</svg>
