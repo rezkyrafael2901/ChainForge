@@ -4,7 +4,24 @@
 
 :root {
   --foreground-rgb: 255, 255, 255;
-  --background-rgb: 10, 10, 15;
+  --background-rgb: 5, 8, 22;
+  --bp-primary: #6366f1;
+  --bp-secondary: #8b5cf6;
+  --bp-cyan: #06b6d4;
+  --bp-surface: #0b1020;
+  --bp-surface-raised: #111827;
+  --bp-border: #1f2937;
+}
+
+[data-theme='light'] {
+  --foreground-rgb: 15, 23, 42;
+  --background-rgb: 248, 250, 252;
+  --bp-primary: #4f46e5;
+  --bp-secondary: #7c3aed;
+  --bp-cyan: #0891b2;
+  --bp-surface: #ffffff;
+  --bp-surface-raised: #eef2ff;
+  --bp-border: #e2e8f0;
 }
 
 body {
@@ -45,7 +62,7 @@ body {
 }
 
 .gradient-text {
-  background: linear-gradient(135deg, #6366f1, #8b5cf6, #a78bfa);
+  background: linear-gradient(135deg, #6366f1, #8b5cf6, #06b6d4);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;

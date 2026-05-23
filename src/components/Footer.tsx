@@ -3,7 +3,7 @@ export default function Footer() {
     <footer className="border-t border-gray-800/50 py-8">
       <div className="max-w-6xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4">
         <p className="text-sm text-gray-500">
-          Built with 🔥 by{' '}
+          Built by{' '}
           <a href="https://github.com/rezkyrafael2901/BlockPilot" className="text-accent-primary hover:text-accent-secondary">
             BlockPilot
           </a>

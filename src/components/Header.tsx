@@ -18,9 +18,9 @@ export default function Header() {
           >
             GitHub
           </a>
-          <button className="px-4 py-2 rounded-lg bg-accent-primary text-white text-sm hover:bg-accent-secondary transition-colors">
-            Connect Wallet
-          </button>
+          <a href="#builder" className="px-4 py-2 rounded-lg bg-accent-primary text-white text-sm hover:bg-accent-secondary transition-colors">
+            Launch Builder
+          </a>
         </nav>
       </div>
     </header>

@@ -119,18 +119,35 @@ export default function HomePage() {
       {/* Hero */}
       <main className="max-w-5xl mx-auto px-4 pt-20 pb-32">
         <div className="text-center mb-16">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-indigo-500/20 bg-indigo-500/10 text-sm text-indigo-200 mb-6">
+            <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+            Prompt → Generate → Deploy
+          </div>
           <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
-            Build <span className="gradient-text">Blockchain</span>
-            <br />Projects with AI
+            Build <span className="gradient-text">On-Chain Products</span>
+            <br />with AI
           </h1>
           <p className="text-xl text-gray-400 max-w-2xl mx-auto">
-            Describe what you want to build. BlockPilot generates complete smart contracts,
-            frontend, and deploy scripts. No code required.
+            Describe your idea in natural language. BlockPilot turns it into smart contracts,
+            frontend, and deploy-ready files — fast, clean, and chain-aware.
           </p>
+          <div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-3 max-w-3xl mx-auto text-left">
+            {[
+              ['1 prompt', 'to structured spec'],
+              ['1 click', 'to generate'],
+              ['1 ZIP', 'for instant export'],
+              ['1 deploy', 'to testnet'],
+            ].map(([top, bottom]) => (
+              <div key={top} className="rounded-2xl border border-gray-800 bg-white/5 px-4 py-3 backdrop-blur-sm">
+                <div className="text-white font-semibold">{top}</div>
+                <div className="text-xs text-gray-400 mt-1">{bottom}</div>
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* Prompt Input */}
-        <div className="max-w-3xl mx-auto mb-8">
+        <div id="builder" className="max-w-3xl mx-auto mb-8 scroll-mt-24">
           <div className="card-glow rounded-2xl">
             <div className="bg-bg-secondary rounded-2xl p-6">
               <textarea
@@ -221,7 +238,7 @@ export default function HomePage() {
                       Building...
                     </span>
                   ) : (
-                    '🔥 Build Project'
+                    '🚀 Generate Project'
                   )}
                 </button>
               </div>
@@ -251,8 +268,26 @@ export default function HomePage() {
           </div>
         </div>
 
+        {/* Workflow */}
+        <div className="max-w-5xl mx-auto mb-20">
+          <div className="grid md:grid-cols-4 gap-3">
+            {[
+              ['01', 'Describe', 'Type your token, NFT, DEX, staking, or DAO idea in plain language.'],
+              ['02', 'Tune', 'Pick the chain, project type, and feature toggles before generation.'],
+              ['03', 'Generate', 'Get contracts, frontend files, deployment scripts, and README.'],
+              ['04', 'Launch', 'Export ZIP or deploy ERC-20 directly with MetaMask on testnet.'],
+            ].map(([step, title, desc]) => (
+              <div key={step} className="rounded-2xl border border-gray-800 bg-bg-secondary/70 p-5 hover:border-indigo-500/40 transition-colors">
+                <div className="text-xs text-cyan-300 font-semibold mb-4">{step}</div>
+                <h3 className="text-white font-semibold mb-2">{title}</h3>
+                <p className="text-sm text-gray-400 leading-relaxed">{desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
         {/* Features */}
-        <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+        <div id="features" className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
           {[
             {
               icon: '🤖',
