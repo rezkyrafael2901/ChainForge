@@ -6,6 +6,8 @@ import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import CodePreview from '@/components/CodePreview'
 import DeployPanel from '@/components/DeployPanel'
+import ProjectInsights from '@/components/ProjectInsights'
+import { saveProject, exportProjectShare, importProjectShare, getCurrentProjectId } from '@/lib/storage'
 import { GeneratedProject, GeneratedFile } from '@/types'
 
 const BUILD_STEPS = [
@@ -19,7 +21,7 @@ export default function BuildPage() {
   const router = useRouter()
   const [project, setProject] = useState<GeneratedProject | null>(null)
   const [currentStep, setCurrentStep] = useState(0)
-  const [activeTab, setActiveTab] = useState<'contracts' | 'frontend' | 'deploy' | 'readme'>('contracts')
+  const [activeTab, setActiveTab] = useState<'contracts' | 'frontend' | 'deploy' | 'readme' | 'edit'>('contracts')
   const [copiedPath, setCopiedPath] = useState<string | null>(null)
   const [isZipping, setIsZipping] = useState(false)
 
@@ -31,6 +33,9 @@ export default function BuildPage() {
     }
     
     const parsed = JSON.parse(data) as GeneratedProject
+    try {
+      saveProject(parsed, getCurrentProjectId() || undefined)
+    } catch {}
     const timers = [
       setTimeout(() => setCurrentStep(1), 800),
       setTimeout(() => setCurrentStep(2), 1600),
@@ -58,6 +63,13 @@ export default function BuildPage() {
     } finally {
       setIsZipping(false)
     }
+  }
+
+  const shareProject = async () => {
+    if (!project) return
+    const url = exportProjectShare(project)
+    await navigator.clipboard.writeText(url)
+    alert('Share link copied to clipboard')
   }
 
   const chainColors: Record<string, string> = {
@@ -105,6 +117,7 @@ export default function BuildPage() {
     { id: 'frontend' as const, label: 'Frontend', count: project.frontend.length },
     { id: 'deploy' as const, label: 'Deploy', count: 1 },
     { id: 'readme' as const, label: 'README', count: 0 },
+    { id: 'edit' as const, label: 'AI Edit', count: 0 },
   ]
 
   const activeFiles: GeneratedFile[] =
@@ -145,6 +158,12 @@ export default function BuildPage() {
               ) : (
                 <>📥 Download ZIP</>
               )}
+            </button>
+            <button
+              onClick={shareProject}
+              className="px-4 py-2 rounded-lg border border-gray-800 bg-bg-secondary text-gray-300 text-sm font-medium hover:text-white hover:border-indigo-500/50 transition-all"
+            >
+              🔗 Share
             </button>
             <button
               onClick={() => setActiveTab('deploy')}
@@ -191,6 +210,7 @@ export default function BuildPage() {
             </div>
           </div>
         </div>
+        <ProjectInsights spec={project.spec} />
 
         {/* Tabs */}
         <div className="flex gap-1 mb-6 bg-bg-secondary rounded-xl p-1">
@@ -210,7 +230,22 @@ export default function BuildPage() {
         </div>
 
         {/* File List */}
-        {activeTab === 'readme' ? (
+        {activeTab === 'edit' ? (
+          <div className="card-glow rounded-xl">
+            <div className="bg-bg-secondary rounded-xl p-6">
+              <h3 className="text-xl font-semibold text-white mb-2">AI Edit Mode</h3>
+              <p className="text-gray-400 mb-5">Describe a change and use it as the next prompt. Full multi-file patching is queued for the cloud editor phase.</p>
+              <div className="grid md:grid-cols-2 gap-3 mb-5">
+                {['Tambah max supply cap', 'Ganti frontend jadi blue/cyan', 'Remove mint permission', 'Deploy ke Base instead'].map((idea) => (
+                  <button key={idea} onClick={() => router.push('/#builder')} className="rounded-xl border border-gray-800 bg-bg-tertiary/60 p-4 text-left text-sm text-gray-300 hover:border-indigo-500/50">
+                    {idea}
+                  </button>
+                ))}
+              </div>
+              <a href="/#builder" className="inline-flex rounded-xl bg-gradient-to-r from-accent-primary to-accent-secondary px-5 py-3 text-sm font-semibold text-white">Start edit prompt</a>
+            </div>
+          </div>
+        ) : activeTab === 'readme' ? (
           <div className="card-glow rounded-xl">
             <div className="bg-bg-secondary rounded-xl p-6">
               <pre className="text-sm text-gray-300 whitespace-pre-wrap font-mono leading-relaxed">

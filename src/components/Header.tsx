@@ -15,8 +15,11 @@ export default function Header() {
           <a href="/pricing" className="hidden md:inline text-sm text-gray-400 hover:text-white transition-colors">
             Pricing
           </a>
-          <a href="/docs" className="hidden md:inline text-sm text-gray-400 hover:text-white transition-colors">
-            Docs
+          <a href="/dashboard" className="hidden md:inline text-sm text-gray-400 hover:text-white transition-colors">
+            Dashboard
+          </a>
+          <a href="/marketplace" className="hidden md:inline text-sm text-gray-400 hover:text-white transition-colors">
+            Marketplace
           </a>
           <a
             href="https://github.com/rezkyrafael2901/BlockPilot"

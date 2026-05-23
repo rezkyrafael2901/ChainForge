@@ -39,6 +39,26 @@ export interface GeneratedProject {
   estimatedGas: string
 }
 
+export interface DeployRecord {
+  id: string
+  projectId: string
+  projectName: string
+  chain: string
+  type: ProjectType
+  txHash: string
+  contractAddress?: string
+  explorerUrl?: string
+  createdAt: string
+}
+
+export interface SavedProjectRecord {
+  id: string
+  project: GeneratedProject
+  createdAt: string
+  updatedAt: string
+  deploys: DeployRecord[]
+}
+
 export interface BuildStep {
   id: string
   label: string

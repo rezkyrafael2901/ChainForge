@@ -139,6 +139,93 @@ contract ${safeContractName(name)} {
 `
 }
 
+export function generateDeployableNFT(spec: ProjectSpec): string {
+  const name = sanitizeString(spec.name || 'BlockPilotNFT')
+  const symbol = sanitizeString(spec.symbol || symbolFromName(name))
+  const maxSupply = sanitizeNumber(String(spec.params?.maxSupply || '10000'))
+  const mintPrice = sanitizeNumber(String(spec.params?.mintPrice || '0'))
+  const baseUri = String(spec.params?.baseUri || 'ipfs://')
+
+  return `// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+/**
+ * @title ${name}
+ * @author BlockPilot
+ * @notice Self-contained ERC-721-style collection generated for one-click deployment.
+ * @dev Minimal NFT template without external imports. Audit before mainnet use.
+ */
+contract ${safeContractName(name)} {
+    string public name = "${name}";
+    string public symbol = "${symbol}";
+    uint256 public maxSupply = ${maxSupply};
+    uint256 public mintPrice = ${mintPrice};
+    string public baseURI = "${baseUri}";
+    address public owner;
+    uint256 public totalSupply;
+
+    mapping(uint256 => address) private _owners;
+    mapping(address => uint256) private _balances;
+    mapping(uint256 => address) private _tokenApprovals;
+    mapping(address => mapping(address => bool)) private _operatorApprovals;
+
+    event Transfer(address indexed from, address indexed to, uint256 indexed tokenId);
+    event Approval(address indexed owner, address indexed approved, uint256 indexed tokenId);
+    event ApprovalForAll(address indexed owner, address indexed operator, bool approved);
+
+    modifier onlyOwner() { require(msg.sender == owner, 'Not owner'); _; }
+
+    constructor() {
+        owner = msg.sender;
+    }
+
+    function mint() external payable {
+        require(totalSupply < maxSupply, 'Sold out');
+        require(msg.value >= mintPrice, 'Insufficient payment');
+        uint256 tokenId = totalSupply + 1;
+        totalSupply = tokenId;
+        _owners[tokenId] = msg.sender;
+        _balances[msg.sender] += 1;
+        emit Transfer(address(0), msg.sender, tokenId);
+    }
+
+    function ownerOf(uint256 tokenId) public view returns (address) {
+        address tokenOwner = _owners[tokenId];
+        require(tokenOwner != address(0), 'Nonexistent token');
+        return tokenOwner;
+    }
+
+    function balanceOf(address account) public view returns (uint256) {
+        require(account != address(0), 'Zero address');
+        return _balances[account];
+    }
+
+    function tokenURI(uint256 tokenId) public view returns (string memory) {
+        require(_owners[tokenId] != address(0), 'Nonexistent token');
+        return string(abi.encodePacked(baseURI, _toString(tokenId)));
+    }
+
+    function withdraw() external onlyOwner {
+        payable(owner).transfer(address(this).balance);
+    }
+
+    function _toString(uint256 value) internal pure returns (string memory) {
+        if (value == 0) return '0';
+        uint256 temp = value;
+        uint256 digits;
+        while (temp != 0) { digits++; temp /= 10; }
+        bytes memory buffer = new bytes(digits);
+        while (value != 0) {
+            digits -= 1;
+            buffer[digits] = bytes1(uint8(48 + uint256(value % 10)));
+            value /= 10;
+        }
+        return string(buffer);
+    }
+}
+`
+}
+
 function sanitizeString(value: string): string {
   return value.replace(/[^a-zA-Z0-9 ]/g, '').trim() || 'BlockPilotToken'
 }

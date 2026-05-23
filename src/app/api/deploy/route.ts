@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { ProjectSpec } from '@/types'
-import { generateDeployableERC20 } from '@/lib/deployable'
+import { generateDeployableERC20, generateDeployableNFT } from '@/lib/deployable'
 
 export const runtime = 'nodejs'
 
@@ -18,15 +18,15 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Project spec is required' }, { status: 400 })
     }
 
-    if (spec.type !== 'token') {
+    if (!['token', 'nft'].includes(spec.type)) {
       return NextResponse.json({
-        error: 'Direct deploy currently supports ERC-20 tokens only',
-        supported: ['token'],
+        error: 'Direct deploy currently supports ERC-20 tokens and NFT collections only',
+        supported: ['token', 'nft'],
         fallback: 'Use Download ZIP or Remix-assisted deploy for this project type.',
       }, { status: 400 })
     }
 
-    const source = generateDeployableERC20(spec)
+    const source = spec.type === 'nft' ? generateDeployableNFT(spec) : generateDeployableERC20(spec)
     const contractName = safeContractName(spec.name || 'BlockPilotToken')
 
     // Dynamic import keeps solc server-side only

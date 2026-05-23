@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { ProjectSpec } from '@/types'
+import { addDeployRecord, getCurrentProjectId } from '@/lib/storage'
 
 interface WalletState {
   connected: boolean
@@ -69,7 +70,7 @@ export default function DeployPanel({ spec, contractSource }: DeployPanelProps) 
   const hasMetaMask = typeof window !== 'undefined' && !!window.ethereum
   const targetChainId = CHAIN_IDS[spec.chain]
   const explorerUrl = EXPLORER_URLS[spec.chain] || EXPLORER_URLS.ethereum
-  const directDeploySupported = spec.type === 'token'
+  const directDeploySupported = ['token', 'nft'].includes(spec.type)
 
   useEffect(() => {
     if (!hasMetaMask) return
@@ -184,6 +185,20 @@ export default function DeployPanel({ spec, contractSource }: DeployPanelProps) 
       if (receipt?.contractAddress) {
         setContractAddress(receipt.contractAddress)
       }
+      const projectId = getCurrentProjectId()
+      if (projectId) {
+        addDeployRecord({
+          id: `${Date.now()}-${hash.slice(2, 10)}`,
+          projectId,
+          projectName: spec.name,
+          chain: spec.chain,
+          type: spec.type,
+          txHash: hash,
+          contractAddress: receipt?.contractAddress,
+          explorerUrl,
+          createdAt: new Date().toISOString(),
+        })
+      }
       setStep('done')
     } catch (err: any) {
       setDeployError(err.message || 'Deployment failed')
@@ -232,7 +247,7 @@ export default function DeployPanel({ spec, contractSource }: DeployPanelProps) 
 
         {!directDeploySupported && (
           <div className="mb-4 p-4 rounded-xl bg-yellow-500/10 border border-yellow-500/30 text-yellow-300 text-sm">
-            Direct deploy currently supports ERC-20 token projects first. For {spec.type.toUpperCase()}, use Download ZIP or Remix-assisted deploy.
+            Direct deploy currently supports ERC-20 tokens and NFT collections. For {spec.type.toUpperCase()}, use Download ZIP or Remix-assisted deploy.
           </div>
         )}
 

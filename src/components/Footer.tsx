@@ -13,8 +13,12 @@ export default function Footer() {
             Pricing
           </a>
           <span className="text-gray-700">•</span>
-          <a href="/docs" className="text-sm text-gray-500 hover:text-white transition-colors">
-            Docs
+          <a href="/dashboard" className="text-sm text-gray-500 hover:text-white transition-colors">
+            Dashboard
+          </a>
+          <span className="text-gray-700">•</span>
+          <a href="/marketplace" className="text-sm text-gray-500 hover:text-white transition-colors">
+            Marketplace
           </a>
           <span className="text-gray-700">•</span>
           <a href="https://github.com/rezkyrafael2901/BlockPilot" target="_blank" rel="noopener noreferrer" className="text-sm text-gray-500 hover:text-white transition-colors">
