@@ -238,7 +238,7 @@ export default function DeployPanel({ spec, contractSource }: DeployPanelProps) 
 
         {!wallet && (
           <div className="space-y-4">
-            <p className="text-gray-400 text-sm">Connect your wallet to deploy from ChainForge.</p>
+            <p className="text-gray-400 text-sm">Connect your wallet to deploy from BlockPilot.</p>
             <button
               onClick={() => connectWallet(true)}
               disabled={isConnecting || !hasMetaMask}

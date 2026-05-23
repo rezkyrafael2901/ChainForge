@@ -4,12 +4,12 @@ export default function Footer() {
       <div className="max-w-6xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4">
         <p className="text-sm text-gray-500">
           Built with 🔥 by{' '}
-          <a href="https://github.com/rezkyrafael2901/ChainForge" className="text-accent-primary hover:text-accent-secondary">
-            ChainForge
+          <a href="https://github.com/rezkyrafael2901/BlockPilot" className="text-accent-primary hover:text-accent-secondary">
+            BlockPilot
           </a>
         </p>
         <div className="flex items-center gap-4">
-          <a href="https://github.com/rezkyrafael2901/ChainForge" target="_blank" rel="noopener noreferrer" className="text-sm text-gray-500 hover:text-white transition-colors">
+          <a href="https://github.com/rezkyrafael2901/BlockPilot" target="_blank" rel="noopener noreferrer" className="text-sm text-gray-500 hover:text-white transition-colors">
             GitHub
           </a>
           <span className="text-gray-700">•</span>

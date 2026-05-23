@@ -4,14 +4,14 @@ export default function Header() {
       <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
         <a href="/" className="flex items-center gap-2">
           <span className="text-2xl">🔥</span>
-          <span className="text-xl font-bold gradient-text">ChainForge</span>
+          <span className="text-xl font-bold gradient-text">BlockPilot</span>
         </a>
         <nav className="flex items-center gap-6">
           <a href="#features" className="text-sm text-gray-400 hover:text-white transition-colors">
             Features
           </a>
           <a
-            href="https://github.com/rezkyrafael2901/ChainForge"
+            href="https://github.com/rezkyrafael2901/BlockPilot"
             target="_blank"
             rel="noopener noreferrer"
             className="text-sm text-gray-400 hover:text-white transition-colors"

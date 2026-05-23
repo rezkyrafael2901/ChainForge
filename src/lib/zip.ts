@@ -92,7 +92,7 @@ remappings = ["@openzeppelin/=lib/openzeppelin-contracts/"]
 
   // === Generate ZIP ===
   const blob = await zip.generateAsync({ type: 'blob' })
-  saveAs(blob, `${projectName}-chainforge.zip`)
+  saveAs(blob, `${projectName}-blockpilot.zip`)
 }
 
 function getRpcUrl(chain: string): string {

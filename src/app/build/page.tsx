@@ -24,7 +24,7 @@ export default function BuildPage() {
   const [isZipping, setIsZipping] = useState(false)
 
   useEffect(() => {
-    const data = sessionStorage.getItem('chainforge_project')
+    const data = sessionStorage.getItem('blockpilot_project')
     if (!data) {
       router.push('/')
       return

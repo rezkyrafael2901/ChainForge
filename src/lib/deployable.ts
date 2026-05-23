@@ -1,7 +1,7 @@
 import { ProjectSpec } from '@/types'
 
 export function generateDeployableERC20(spec: ProjectSpec): string {
-  const name = sanitizeString(spec.name || 'ChainForgeToken')
+  const name = sanitizeString(spec.name || 'BlockPilotToken')
   const symbol = sanitizeString(spec.symbol || symbolFromName(name))
   const supply = sanitizeNumber(String(spec.params?.supply || '1000000'))
   const features = spec.features || []
@@ -15,7 +15,7 @@ pragma solidity ^0.8.20;
 
 /**
  * @title ${name}
- * @author ChainForge
+ * @author BlockPilot
  * @notice Self-contained ERC-20 contract generated for one-click deployment.
  * @dev No external imports required. Audit before mainnet use.
  */
@@ -140,7 +140,7 @@ contract ${safeContractName(name)} {
 }
 
 function sanitizeString(value: string): string {
-  return value.replace(/[^a-zA-Z0-9 ]/g, '').trim() || 'ChainForgeToken'
+  return value.replace(/[^a-zA-Z0-9 ]/g, '').trim() || 'BlockPilotToken'
 }
 
 function sanitizeNumber(value: string): string {
@@ -149,7 +149,7 @@ function sanitizeNumber(value: string): string {
 }
 
 function safeContractName(value: string): string {
-  const cleaned = value.replace(/[^a-zA-Z0-9]/g, '') || 'ChainForgeToken'
+  const cleaned = value.replace(/[^a-zA-Z0-9]/g, '') || 'BlockPilotToken'
   return /^[A-Za-z]/.test(cleaned) ? cleaned : `Token${cleaned}`
 }
 

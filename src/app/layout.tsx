@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'ChainForge — AI Blockchain Project Builder',
+  title: 'BlockPilot — AI Blockchain Project Builder',
   description: 'Prompt → Deploy. Build blockchain projects with AI. No code required.',
 }
 

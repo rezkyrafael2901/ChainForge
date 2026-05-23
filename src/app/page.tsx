@@ -99,7 +99,7 @@ export default function HomePage() {
       const project = await genRes.json()
 
       // Save to sessionStorage and redirect
-      sessionStorage.setItem('chainforge_project', JSON.stringify(project))
+      sessionStorage.setItem('blockpilot_project', JSON.stringify(project))
       router.push('/build')
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong')
@@ -124,7 +124,7 @@ export default function HomePage() {
             <br />Projects with AI
           </h1>
           <p className="text-xl text-gray-400 max-w-2xl mx-auto">
-            Describe what you want to build. ChainForge generates complete smart contracts,
+            Describe what you want to build. BlockPilot generates complete smart contracts,
             frontend, and deploy scripts. No code required.
           </p>
         </div>

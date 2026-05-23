@@ -27,7 +27,7 @@ export async function POST(request: Request) {
     }
 
     const source = generateDeployableERC20(spec)
-    const contractName = safeContractName(spec.name || 'ChainForgeToken')
+    const contractName = safeContractName(spec.name || 'BlockPilotToken')
 
     // Dynamic import keeps solc server-side only
     // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -93,6 +93,6 @@ export async function POST(request: Request) {
 }
 
 function safeContractName(value: string): string {
-  const cleaned = value.replace(/[^a-zA-Z0-9]/g, '') || 'ChainForgeToken'
+  const cleaned = value.replace(/[^a-zA-Z0-9]/g, '') || 'BlockPilotToken'
   return /^[A-Za-z]/.test(cleaned) ? cleaned : `Token${cleaned}`
 }

@@ -1,4 +1,4 @@
-# 🔥 ChainForge — AI-Powered Blockchain Project Builder
+# 🔥 BlockPilot — AI-Powered Blockchain Project Builder
 
 > "Prompt → Deploy. No code required."
 
@@ -7,7 +7,7 @@
 ## 1. VISION & POSITIONING
 
 **One-liner:**
-ChainForge adalah AI agent yang mengubah natural language prompt menjadi project blockchain yang fully deployed — smart contracts, frontend, backend, dan infra — dalam hitungan menit.
+BlockPilot adalah AI agent yang mengubah natural language prompt menjadi project blockchain yang fully deployed — smart contracts, frontend, backend, dan infra — dalam hitungan menit.
 
 **Positioning:**
 - Bukan dev tool → ini **product builder**
@@ -16,7 +16,7 @@ ChainForge adalah AI agent yang mengubah natural language prompt menjadi project
 
 **Key Differentiator:**
 - Competitor = tools buat developer (Thirdweb, Hardhat, Scaffold-ETH)
-- ChainForge = tools buat **everyone** — no coding knowledge needed
+- BlockPilot = tools buat **everyone** — no coding knowledge needed
 - End-to-end: dari ide sampai live product, bukan cuma boilerplate
 
 ---
@@ -247,7 +247,7 @@ AI Review:
 ## 7. USER EXPERIENCE FLOW
 
 ```
-[User opens ChainForge]
+[User opens BlockPilot]
          │
          ▼
    ┌─────────────┐
@@ -262,7 +262,7 @@ AI Review:
           │
           ▼
    ┌──────────────────────────────┐
-   │ 🤖 ChainForge memproses...   │
+   │ 🤖 BlockPilot memproses...   │
    │                              │
    │ ✅ Project type: NFT Mktplace│
    │ ✅ Chain: Arbitrum One       │
@@ -303,7 +303,7 @@ AI Review:
    │  0x5678...efgh (Marketplace) │
    │                              │
    │ 🌐 Live:                     │
-   │  cryptomonkeys.chainforge.ai │
+   │  cryptomonkeys.blockpilot.ai │
    │                              │
    │ [View Explorer] [Open Site]  │
    │ [Download Code] [Customize]  │
@@ -319,7 +319,7 @@ AI Review:
 **🆓 Free Tier**
 - 3 projects/month (testnet only)
 - Basic templates (Token, NFT)
-- ChainForge branding on frontend
+- BlockPilot branding on frontend
 - Community support
 
 **💎 Pro — $29/month**
@@ -348,7 +348,7 @@ AI Review:
 2. **Per-deploy fees** — pay-as-you-go users
 3. **Template marketplace** — premium curated templates ($10-50 each)
 4. **White-label licensing** — agency/incubator use ($500-2000/mo)
-5. **API access** — developers integrating ChainForge into their apps
+5. **API access** — developers integrating BlockPilot into their apps
 6. **Partnership rev-share** — chain ecosystem grants + incentives
 
 ---
@@ -359,7 +359,7 @@ AI Review:
                     Low Code ←──────────→ Full Code
                          │                    │
     Non-dev ─────────────┤                    │
-                         │  ★ ChainForge      │
+                         │  ★ BlockPilot      │
                          │  (lo disini)       │
                          │                    │
                          │     Thirdweb       │
@@ -371,7 +371,7 @@ AI Review:
                          └────────────────────┘
 ```
 
-**ChainForge vs Others:**
+**BlockPilot vs Others:**
 - **vs Thirdweb**: Mereka SDK, lo full product builder
 - **vs Scaffold-ETH**: Mereka dev starter, lo non-dev friendly
 - **vs Lovable/Bolt.new**: Mereka web2, lo web3-native
@@ -470,4 +470,4 @@ Week 4:
 
 ---
 
-*ChainForge v0.1 — From prompt to blockchain, in minutes. 🔥*
+*BlockPilot v0.1 — From prompt to blockchain, in minutes. 🔥*

@@ -1,8 +1,8 @@
-# 🔥 ChainForge
+# 🔥 BlockPilot
 
 **AI-Powered Blockchain Project Builder — Prompt → Deploy. No code required.**
 
-ChainForge lets you build full blockchain projects by simply describing what you want. From smart contracts to frontend, everything is generated and ready to deploy.
+BlockPilot lets you build full blockchain projects by simply describing what you want. From smart contracts to frontend, everything is generated and ready to deploy.
 
 ## Features
 
@@ -25,8 +25,8 @@ ChainForge lets you build full blockchain projects by simply describing what you
 ## Quick Start
 
 ```bash
-git clone https://github.com/rezkyrafael2901/ChainForge.git
-cd ChainForge
+git clone https://github.com/rezkyrafael2901/BlockPilot.git
+cd BlockPilot
 npm install
 npm run dev
 ```
@@ -58,4 +58,4 @@ Open [http://localhost:3000](http://localhost:3000)
 
 ## License
 
-MIT — Built with 🔥 by [ChainForge](https://github.com/rezkyrafael2901/ChainForge)
+MIT — Built with 🔥 by [BlockPilot](https://github.com/rezkyrafael2901/BlockPilot)
