@@ -30,6 +30,30 @@ body {
   font-family: system-ui, -apple-system, sans-serif;
 }
 
+html[data-theme='light'] body {
+  color: #0f172a;
+}
+html[data-theme='light'] .bg-bg-primary { background-color: #f8fafc; }
+html[data-theme='light'] .bg-bg-secondary { background-color: #ffffff; }
+html[data-theme='light'] .bg-bg-tertiary { background-color: #eef2ff; }
+html[data-theme='light'] .text-white { color: #0f172a; }
+html[data-theme='light'] .text-gray-300 { color: #334155; }
+html[data-theme='light'] .text-gray-400 { color: #475569; }
+html[data-theme='light'] .text-gray-500 { color: #64748b; }
+html[data-theme='light'] .border-gray-800 { border-color: #e2e8f0; }
+html[data-theme='light'] .border-gray-800\/50 { border-color: rgba(226, 232, 240, 0.8); }
+html[data-theme='light'] .bg-white\/5 { background-color: rgba(255, 255, 255, 0.75); }
+html[data-theme='light'] .grid-bg {
+  background-image:
+    linear-gradient(rgba(79, 70, 229, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(79, 70, 229, 0.08) 1px, transparent 1px);
+}
+html[data-theme='light'] .light-surface {
+  background: rgba(255, 255, 255, 0.85);
+  border-color: #e2e8f0;
+  color: #334155;
+}
+
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: #12121a; }
 ::-webkit-scrollbar-thumb { background: #6366f1; border-radius: 3px; }

@@ -113,11 +113,16 @@ export default function HomePage() {
   }
 
   return (
-    <div className="min-h-screen grid-bg">
+    <div className="min-h-screen grid-bg relative overflow-hidden">
       <Header />
+      <div className="pointer-events-none absolute inset-x-0 top-0 -z-0 h-[620px]">
+        <div className="absolute left-1/2 top-24 h-72 w-72 -translate-x-1/2 rounded-full bg-indigo-500/20 blur-3xl animate-pulse" />
+        <div className="absolute right-10 top-36 h-64 w-64 rounded-full bg-cyan-500/10 blur-3xl" />
+        <div className="absolute left-10 top-56 h-64 w-64 rounded-full bg-violet-500/10 blur-3xl" />
+      </div>
 
       {/* Hero */}
-      <main className="max-w-5xl mx-auto px-4 pt-20 pb-32">
+      <main className="relative z-10 max-w-5xl mx-auto px-4 pt-20 pb-32">
         <div className="text-center mb-16">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-indigo-500/20 bg-indigo-500/10 text-sm text-indigo-200 mb-6">
             <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />

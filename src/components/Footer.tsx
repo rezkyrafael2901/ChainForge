@@ -9,6 +9,14 @@ export default function Footer() {
           </a>
         </p>
         <div className="flex items-center gap-4">
+          <a href="/pricing" className="text-sm text-gray-500 hover:text-white transition-colors">
+            Pricing
+          </a>
+          <span className="text-gray-700">•</span>
+          <a href="/docs" className="text-sm text-gray-500 hover:text-white transition-colors">
+            Docs
+          </a>
+          <span className="text-gray-700">•</span>
           <a href="https://github.com/rezkyrafael2901/BlockPilot" target="_blank" rel="noopener noreferrer" className="text-sm text-gray-500 hover:text-white transition-colors">
             GitHub
           </a>
